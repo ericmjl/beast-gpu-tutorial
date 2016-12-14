@@ -57,7 +57,7 @@ If you are on a Unix-based machine, you can configure your SSH as follows:
 - Ensure that the following is entered into your SSH configuration file:
 ```config
 Host beast
-  HostName [insert your AWS public DNS without the square brackets here]
+  HostName [AWS public DNS]
   User ubuntu
   IdentityFile ~/.ssh/beast.pem
 ```
