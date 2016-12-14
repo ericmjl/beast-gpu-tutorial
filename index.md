@@ -55,7 +55,7 @@ If you are on a Unix-based machine, you can configure your SSH as follows:
 
 - Move `beast.pem` to the directory `~/.ssh/`.
 - Ensure that the following is entered into your SSH configuration file:
-```
+```config
 Host beast
   HostName [insert your AWS public DNS without the square brackets here]
   User ubuntu
@@ -118,7 +118,7 @@ $ nano .bashrc
 
 In `nano`, use `Ctrl` + `V` to scroll all the way down to the the `.bashrc` file. Then, add the following two lines to it:
 
-```
+```bash
 export LD_LIBRARY_PATH=$HOME/lib:$LD_LIBRARY_PATH
 export PKG_CONFIG_PATH=$HOME/lib/pkgconfig:$PKG_CONFIG_PATH
 export PATH=$HOME/beast/bin:$PATH

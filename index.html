@@ -116,7 +116,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <ul>
 <li>Move <code>beast.pem</code> to the directory <code>~/.ssh/</code>.</li>
 <li><p>Ensure that the following is entered into your SSH configuration file:</p>
-<pre><code>Host beast
+<pre class="config"><code>Host beast
   HostName [insert your AWS public DNS without the square brackets here]
   User ubuntu
   IdentityFile ~/.ssh/beast.pem</code></pre></li>
@@ -165,9 +165,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="bu">cd</span> ~
 $ <span class="fu">nano</span> .bashrc</code></pre></div>
 <p>In <code>nano</code>, use <code>Ctrl</code> + <code>V</code> to scroll all the way down to the the <code>.bashrc</code> file. Then, add the following two lines to it:</p>
-<pre><code>export LD_LIBRARY_PATH=$HOME/lib:$LD_LIBRARY_PATH
-export PKG_CONFIG_PATH=$HOME/lib/pkgconfig:$PKG_CONFIG_PATH
-export PATH=$HOME/beast/bin:$PATH</code></pre>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="bu">export</span> <span class="va">LD_LIBRARY_PATH=$HOME</span>/lib:<span class="va">$LD_LIBRARY_PATH</span>
+<span class="bu">export</span> <span class="va">PKG_CONFIG_PATH=$HOME</span>/lib/pkgconfig:<span class="va">$PKG_CONFIG_PATH</span>
+<span class="bu">export</span> <span class="va">PATH=$HOME</span>/beast/bin:<span class="va">$PATH</span></code></pre></div>
 <p>In that last line, we are going to make sure that the bash terminal will be able to find the BEAST binaries in the <code>beast</code> directory in our home folder.</p>
 <p>Exit out of the terminal session using <code>exit</code>, and SSH back in using <code>ssh beast</code>, to allow the edited <code>.bashrc</code> to take effect.</p>
 <h1 id="install-beast">Install BEAST</h1>
