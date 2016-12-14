@@ -4,6 +4,11 @@ author: Eric J. Ma
 date: 13 December 2016
 ---
 
+# Information
+
+- Page source on [GitHub](https://www.github.com/ericmjl/beast-gpu-tutorial). Contributions welcome via Pull Requests.
+- More information on BEAST can found [here](http://beast.bio.ed.ac.uk).
+
 # Configure and fire up an Amazon AWS instance
 
 Start by going to: http://aws.amazon.com/, and sign in using your Amazon.com account. You will arrive at the following console:
