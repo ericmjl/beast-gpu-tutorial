@@ -1,0 +1,197 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="author" content="Eric J. Ma" />
+  <meta name="date" content="2016-12-13" />
+  <title>How to start an Amazon AWS GPU instance and run BEAST on it.</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
+  <style>
+  
+  body{
+      font-family: "PT Sans";
+      padding-left: 2rem;
+      padding-right: 2rem;
+      padding-top: 2rem;
+      padding-bottom: 2rem;
+  }
+  
+  h1.title{
+  
+      font-size: 3rem;
+  }
+  
+  </style>
+  
+  <link href="https://fonts.googleapis.com/css?family=PT+Sans" rel="stylesheet”></link>
+</head>
+<body>
+<div id="header">
+<h1 class="title">How to start an Amazon AWS GPU instance and run BEAST on it.</h1>
+<h2 class="author">Eric J. Ma</h2>
+<h3 class="date">13 December 2016</h3>
+</div>
+<h1 id="configure-and-fire-up-an-amazon-aws-instance">Configure and fire up an Amazon AWS instance</h1>
+<p>Start by going to: http://aws.amazon.com/, and sign in using your Amazon.com account. You will arrive at the following console:</p>
+<div class="figure">
+<img src="./images/aws-landing.png" alt="AWS landing page" id="aws-landing" class="class" width="800" />
+<p class="caption">AWS landing page</p>
+</div>
+<p>Click on the big blue &quot;Launch Instance&quot; button. You will then arrive at the following page where you can select an &quot;Amazon Machine Image&quot; (AMI):</p>
+<div class="figure">
+<img src="./images/aws-ami.png" alt="AMI selection page." id="aws-ami" class="class" width="800" />
+<p class="caption">AMI selection page.</p>
+</div>
+<p>At this point, you are basically selecting an operating system to work with. Select the &quot;Ubuntu Server&quot;; the version number might change in the future, so I won't specify which version here. You now have to choose an &quot;instance type&quot;, which specifies the hardware that will be used. Scroll down until you see the <code>g2.2xlarge</code> instance, select it, and click &quot;Configure Instance Details&quot;.</p>
+<div class="figure">
+<img src="./images/aws-instance.png" alt="Instance selection page." id="aws-instance" class="class" width="800" />
+<p class="caption">Instance selection page.</p>
+</div>
+<p>You will land on the &quot;Configure Instance Details&quot; page. Here, I have canonically not done anything, so you can click on to &quot;Add Storage&quot;. On the &quot;Add Storage&quot; page, change the <code>Size (GiB)</code> of the Root volume to 60GB. This maxes out the size of the root volume, so you don't have to worry about other storage.</p>
+<div class="figure">
+<img src="./images/aws-storage.png" alt="Instance storage page." id="aws-storage" class="class" width="800" />
+<p class="caption">Instance storage page.</p>
+</div>
+<p>Click on to &quot;Add Tags&quot;, and then click on to &quot;Configure Security Group&quot;. Here, you want to enable SSH access via the terminal, and you'll want to give this security access some memorable name that you can identify for future use.</p>
+<p>If this is the first time you're configuring a security group, set it up as follows:</p>
+<div class="figure">
+<img src="./images/aws-security.png" alt="First-time setup" id="aws-security" class="class" width="800" />
+<p class="caption">First-time setup</p>
+</div>
+<p>If you've already set up a security group before, click on &quot;Select an <strong>existing</strong> security group&quot;, and select that security group.</p>
+<p>Then, click on &quot;Review and Launch&quot;, and then &quot;Launch&quot;.</p>
+<p>You will be prompted to select or create a &quot;key pair&quot;; this is for security purposes, and will allow you to SSH into the Amazon EC2 instance. Name the key pair name something memorable, say &quot;beast&quot;, and then download the <code>beast.pem</code> file to your local disk.</p>
+<div class="figure">
+<img src="./images/aws-keys.png" alt="Create a key pair for accessing AWS." id="aws-keys" class="class" width="800" />
+<p class="caption">Create a key pair for accessing AWS.</p>
+</div>
+<p><strong>Note:</strong> Some browsers will download it as <code>beast.pem.txt</code>. Be sure to then re-name it to <code>beast.pem</code>.</p>
+<p>Once the instance is launched, you can go back to the console, and wait for it to be initialized. You will see the following page:</p>
+<div class="figure">
+<img src="./images/aws-console.png" alt="AWS console." id="aws-console" class="class" width="800" />
+<p class="caption">AWS console.</p>
+</div>
+<p>Take note of the &quot;Public DNS&quot;, and make a copy of that.</p>
+<h1 id="configure-ssh-and-then-ssh-into-the-amazon-ec2-instance.">Configure SSH and then SSH into the Amazon EC2 instance.</h1>
+<p>If you are on a Unix-based machine, you can configure your SSH as follows:</p>
+<ul>
+<li>Move <code>beast.pem</code> to the directory <code>~/.ssh/</code>.</li>
+<li><p>Ensure that the following is entered into your SSH configuration file:</p>
+<pre><code>Host beast
+  HostName [insert your AWS public DNS without the square brackets here]
+  User ubuntu
+  IdentityFile ~/.ssh/beast.pem</code></pre></li>
+<li>Now, in your terminal, you can type <code>ssh beast</code>, and you will be SSH-ed into the Amazon instance!
+<ul>
+<li>If you are asked <code>Are you sure you want to continue connecting?</code>, be sure to answer <code>yes</code>.</li>
+</ul></li>
+<li><p>Your Terminal session should look something like this:</p></li>
+</ul>
+<div class="figure">
+<img src="./images/ssh.png" alt="SSH in iTerm2" id="ssh" class="class" width="800" />
+<p class="caption">SSH in iTerm2</p>
+</div>
+<h1 id="install-the-necessary-drivers.">Install the necessary drivers.</h1>
+<p>Note: The bash commands here are predicated on using an Ubuntu Linux AMI. If you are using a different AMI, the commands will not work.</p>
+<p>The overview is as follows:</p>
+<ol style="list-style-type: decimal">
+<li>You will create a bash script that will execute installation of every single piece.</li>
+<li>Be sure to check &quot;version numbers&quot; that are part of the name of packages and URLs. Replace them as necessary.</li>
+</ol>
+<p>In your terminal, invoke the <code>nano</code> text editor:</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="fu">nano</span> install.sh</code></pre></div>
+<p>Then, paste the following bash script code into the <code>nano</code> text editor.</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="fu">sudo</span> apt-get -y update  <span class="co"># always a good idea to update and upgrade before doing anything else.</span>
+<span class="fu">sudo</span> apt-get -y upgrade
+<span class="fu">sudo</span> apt-get -y install build-essential autoconf automake libtool subversion pkg-config openjdk-8-jdk
+<span class="fu">wget</span> http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/cuda-repo-ubuntu1604_8.0.44-1_amd64.deb
+<span class="fu">sudo</span> dpkg -i cuda-repo-ubuntu1604_8.0.44-1_amd64.deb
+<span class="fu">sudo</span> apt-get update -y
+<span class="fu">sudo</span> apt-get install -y cuda linux-image-extra-<span class="kw">`</span><span class="fu">uname</span> -r<span class="kw">`</span> linux-headers-<span class="kw">`</span><span class="fu">uname</span> -r<span class="kw">`</span> linux-image-<span class="kw">`</span><span class="fu">uname</span> -r<span class="kw">`</span>
+<span class="fu">sudo</span> apt-get install -y --no-install-recommends nvidia-361 nvidia-opencl-icd-361
+<span class="fu">git</span> clone --depth=1 https://github.com/beagle-dev/beagle-lib.git
+<span class="bu">cd</span> beagle-lib
+<span class="ex">./autogen.sh</span>
+<span class="ex">./configure</span> --prefix=<span class="va">$HOME</span>
+<span class="fu">make</span> install
+<span class="fu">make</span> check
+<span class="bu">cd</span> ..</code></pre></div>
+<p>Exit out of <code>nano</code> by hitting the following key combinations:</p>
+<ul>
+<li><code>Ctrl</code> + <code>X</code> (exit)</li>
+<li><code>Y</code> (say yes to save)</li>
+</ul>
+<p>Finally, run the install script using the following command: <code>bash install.sh</code>. Give it a bit of time (~5 min in total, in my experience), and then CUDA OpenCL and BEAGLE will be installed.</p>
+<p>Next up, we will have to edit your <code>.bashrc</code> using <code>nano</code>. Follow the following commands (of course, ignoring the <code>$</code> symbol):</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="bu">cd</span> ~
+$ <span class="fu">nano</span> .bashrc</code></pre></div>
+<p>In <code>nano</code>, use <code>Ctrl</code> + <code>V</code> to scroll all the way down to the the <code>.bashrc</code> file. Then, add the following two lines to it:</p>
+<pre><code>export LD_LIBRARY_PATH=$HOME/lib:$LD_LIBRARY_PATH
+export PKG_CONFIG_PATH=$HOME/lib/pkgconfig:$PKG_CONFIG_PATH
+export PATH=$HOME/beast/bin:$PATH</code></pre>
+<p>In that last line, we are going to make sure that the bash terminal will be able to find the BEAST binaries in the <code>beast</code> directory in our home folder.</p>
+<p>Exit out of the terminal session using <code>exit</code>, and SSH back in using <code>ssh beast</code>, to allow the edited <code>.bashrc</code> to take effect.</p>
+<h1 id="install-beast">Install BEAST</h1>
+<p>Run the following commands in order:</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="bu">cd</span> ~
+<span class="fu">wget</span> https://github.com/beast-dev/beast-mcmc/releases/download/v1.8.4/BEASTv1.8.4.tgz
+<span class="fu">tar</span> -xvf BEASTv1.8.4.tgz
+<span class="fu">mv</span> BEASTv1.8.4/ beast/  <span class="co"># this renames BEAST</span></code></pre></div>
+<p>Check that the BEAST binary is recognized:</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="fu">which</span> beast
+<span class="ex">/home/ubuntu/beast/bin/beast</span></code></pre></div>
+<h1 id="save-the-ami">Save the AMI</h1>
+<p>The purpose of this part here is to save the current state of the instance as an AMI, so that you don't have to configure this again in the future. Switch back to your browser and go to the AWS console. Select the current running instance, then click on <code>Actions &gt; Image &gt; Create Image</code>. You will get the following screen:</p>
+<div class="figure">
+<img src="./images/aws-save-ami.png" alt="How to save an AWS instance image" id="aws-save-ami" class="class" width="800" />
+<p class="caption">How to save an AWS instance image</p>
+</div>
+<p>You will be able to create a new instance from this AMI, and use nearly identical SSH settings to get back into the instance.</p>
+<h1 id="run-beast">Run BEAST</h1>
+<p>Now you're ready to run BEAST! I'm going to pre-suppose here that you have an <code>.xml</code> file created using BEAUTI; you can use the <code>scp</code> command to upload it from your local drive into the Amazon instance. An example command is as such:</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="fu">scp</span> [my_xml_file].xml beast:~/path/to/my/directory/.</code></pre></div>
+<p>Naturally, replace <code>/path/to/my/directory/</code> with the directory on <code>beast</code> where you want to store the XML file.</p>
+<p>To run BEAST while taking advantage of the GPU using BEAGLE, run the following commands:</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="ex">beast</span> -beagle -beagle_GPU -beagle_SSE -beagle_cuda [my_xml_file].xml</code></pre></div>
+<p>That will be the command that will let you take advantage of the GPU while using BEAST.</p>
+</body>
+</html>
