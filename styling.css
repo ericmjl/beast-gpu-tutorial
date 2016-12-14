@@ -15,6 +15,10 @@ div.sourceCode{
     background-color: #efefef;
 }
 
-div.sourceCode > code {
+div.sourceCode > pre {
+    padding-left: 1rem;
+}
+
+pre {
     padding-left: 1rem;
 }
