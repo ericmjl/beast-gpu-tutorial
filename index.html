@@ -63,6 +63,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><a href="#install-beast">Install BEAST</a></li>
 <li><a href="#save-the-ami">Save the AMI</a></li>
 <li><a href="#run-beast">Run BEAST</a></li>
+<li><a href="#performance-boost">Performance Boost</a></li>
 </ul>
 </div>
 <h1 id="information">Information</h1>
@@ -193,5 +194,7 @@ $ <span class="fu">nano</span> .bashrc</code></pre></div>
 <p>To run BEAST while taking advantage of the GPU using BEAGLE, run the following commands:</p>
 <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="ex">beast</span> -beagle -beagle_GPU -beagle_SSE -beagle_cuda [my_xml_file].xml</code></pre></div>
 <p>That will be the command that will let you take advantage of the GPU while using BEAST.</p>
+<h1 id="performance-boost">Performance Boost</h1>
+<p>In a single test, using this workflow and comparing it to a compute cluster that I have access to (MIT's Rous), on the same 10 million chain MCMC, Rous performed at 1.1-1.2 hours/million chains, while Amazon's GPU instance (K520 GRID) performed at 0.24-0.27 hours/million chains, gaining approximately 5-6 fold performance.</p>
 </body>
 </html>

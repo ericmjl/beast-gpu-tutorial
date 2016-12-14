@@ -171,3 +171,7 @@ $ beast -beagle -beagle_GPU -beagle_SSE -beagle_cuda [my_xml_file].xml
 ```
 
 That will be the command that will let you take advantage of the GPU while using BEAST.
+
+# Performance Boost
+
+In a single test, using this workflow and comparing it to a compute cluster that I have access to (MIT's Rous), on the same 10 million chain MCMC, Rous performed at 1.1-1.2 hours/million chains, while Amazon's GPU instance (K520 GRID) performed at 0.24-0.27 hours/million chains, gaining approximately 5-6 fold performance.
