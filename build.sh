@@ -1,4 +1,4 @@
-pandoc index.md -o index.html -H styling.css --toc
+pandoc index.md -o index.html -H header.html --toc -c styling.css
 
 git add .
 git commit
