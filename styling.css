@@ -14,3 +14,7 @@ h1.title{
 div.sourceCode{
     background-color: #efefef;
 }
+
+div.sourceCode > code {
+    padding-left: 1rem;
+}
