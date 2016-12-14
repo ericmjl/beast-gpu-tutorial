@@ -73,41 +73,41 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h1 id="configure-and-fire-up-an-amazon-aws-instance">Configure and fire up an Amazon AWS instance</h1>
 <p>Start by going to: http://aws.amazon.com/, and sign in using your Amazon.com account. You will arrive at the following console:</p>
 <div class="figure">
-<img src="./images/aws-landing.png" alt="AWS landing page" id="aws-landing" class="class" width="800" />
+<img src="./images/aws-landing.png" alt="AWS landing page" id="aws-landing" class="class" style="width:100.0%" />
 <p class="caption">AWS landing page</p>
 </div>
 <p>Click on the big blue &quot;Launch Instance&quot; button. You will then arrive at the following page where you can select an &quot;Amazon Machine Image&quot; (AMI):</p>
 <div class="figure">
-<img src="./images/aws-ami.png" alt="AMI selection page." id="aws-ami" class="class" width="800" />
+<img src="./images/aws-ami.png" alt="AMI selection page." id="aws-ami" class="class" style="width:100.0%" />
 <p class="caption">AMI selection page.</p>
 </div>
 <p>At this point, you are basically selecting an operating system to work with. Select the &quot;Ubuntu Server&quot;; the version number might change in the future, so I won't specify which version here. You now have to choose an &quot;instance type&quot;, which specifies the hardware that will be used. Scroll down until you see the <code>g2.2xlarge</code> instance, select it, and click &quot;Configure Instance Details&quot;.</p>
 <div class="figure">
-<img src="./images/aws-instance.png" alt="Instance selection page." id="aws-instance" class="class" width="800" />
+<img src="./images/aws-instance.png" alt="Instance selection page." id="aws-instance" class="class" style="width:100.0%" />
 <p class="caption">Instance selection page.</p>
 </div>
 <p>You will land on the &quot;Configure Instance Details&quot; page. Here, I have canonically not done anything, so you can click on to &quot;Add Storage&quot;. On the &quot;Add Storage&quot; page, change the <code>Size (GiB)</code> of the Root volume to 60GB. This maxes out the size of the root volume, so you don't have to worry about other storage.</p>
 <div class="figure">
-<img src="./images/aws-storage.png" alt="Instance storage page." id="aws-storage" class="class" width="800" />
+<img src="./images/aws-storage.png" alt="Instance storage page." id="aws-storage" class="class" style="width:100.0%" />
 <p class="caption">Instance storage page.</p>
 </div>
 <p>Click on to &quot;Add Tags&quot;, and then click on to &quot;Configure Security Group&quot;. Here, you want to enable SSH access via the terminal, and you'll want to give this security access some memorable name that you can identify for future use.</p>
 <p>If this is the first time you're configuring a security group, set it up as follows:</p>
 <div class="figure">
-<img src="./images/aws-security.png" alt="First-time setup" id="aws-security" class="class" width="800" />
+<img src="./images/aws-security.png" alt="First-time setup" id="aws-security" class="class" style="width:100.0%" />
 <p class="caption">First-time setup</p>
 </div>
 <p>If you've already set up a security group before, click on &quot;Select an <strong>existing</strong> security group&quot;, and select that security group.</p>
 <p>Then, click on &quot;Review and Launch&quot;, and then &quot;Launch&quot;.</p>
 <p>You will be prompted to select or create a &quot;key pair&quot;; this is for security purposes, and will allow you to SSH into the Amazon EC2 instance. Name the key pair name something memorable, say &quot;beast&quot;, and then download the <code>beast.pem</code> file to your local disk.</p>
 <div class="figure">
-<img src="./images/aws-keys.png" alt="Create a key pair for accessing AWS." id="aws-keys" class="class" width="800" />
+<img src="./images/aws-keys.png" alt="Create a key pair for accessing AWS." id="aws-keys" class="class" style="width:100.0%" />
 <p class="caption">Create a key pair for accessing AWS.</p>
 </div>
 <p><strong>Note:</strong> Some browsers will download it as <code>beast.pem.txt</code>. Be sure to then re-name it to <code>beast.pem</code>.</p>
 <p>Once the instance is launched, you can go back to the console, and wait for it to be initialized. You will see the following page:</p>
 <div class="figure">
-<img src="./images/aws-console.png" alt="AWS console." id="aws-console" class="class" width="800" />
+<img src="./images/aws-console.png" alt="AWS console." id="aws-console" class="class" style="width:100.0%" />
 <p class="caption">AWS console.</p>
 </div>
 <p>Take note of the &quot;Public DNS&quot;, and make a copy of that.</p>
@@ -127,7 +127,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><p>Your Terminal session should look something like this:</p></li>
 </ul>
 <div class="figure">
-<img src="./images/ssh.png" alt="SSH in iTerm2" id="ssh" class="class" width="800" />
+<img src="./images/ssh.png" alt="SSH in iTerm2" id="ssh" class="class" style="width:100.0%" />
 <p class="caption">SSH in iTerm2</p>
 </div>
 <h1 id="install-the-necessary-drivers.">Install the necessary drivers.</h1>
@@ -182,7 +182,7 @@ $ <span class="fu">nano</span> .bashrc</code></pre></div>
 <h1 id="save-the-ami">Save the AMI</h1>
 <p>The purpose of this part here is to save the current state of the instance as an AMI, so that you don't have to configure this again in the future. Switch back to your browser and go to the AWS console. Select the current running instance, then click on <code>Actions &gt; Image &gt; Create Image</code>. You will get the following screen:</p>
 <div class="figure">
-<img src="./images/aws-save-ami.png" alt="How to save an AWS instance image" id="aws-save-ami" class="class" width="800" />
+<img src="./images/aws-save-ami.png" alt="How to save an AWS instance image" id="aws-save-ami" class="class" style="width:100.0%" />
 <p class="caption">How to save an AWS instance image</p>
 </div>
 <p>You will be able to create a new instance from this AMI, and use nearly identical SSH settings to get back into the instance.</p>

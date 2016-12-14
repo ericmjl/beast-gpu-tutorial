@@ -13,25 +13,25 @@ date: 13 December 2016
 
 Start by going to: http://aws.amazon.com/, and sign in using your Amazon.com account. You will arrive at the following console:
 
-![AWS landing page](./images/aws-landing.png){#aws-landing .class width=800}
+![AWS landing page](./images/aws-landing.png){#aws-landing .class width=100%}
 
 Click on the big blue "Launch Instance" button. You will then arrive at the following page where you can select an "Amazon Machine Image" (AMI):
 
-![AMI selection page.](./images/aws-ami.png){#aws-ami .class width=800}
+![AMI selection page.](./images/aws-ami.png){#aws-ami .class width=100%}
 
 At this point, you are basically selecting an operating system to work with. Select the "Ubuntu Server"; the version number might change in the future, so I won't specify which version here. You now have to choose an "instance type", which specifies the hardware that will be used. Scroll down until you see the `g2.2xlarge` instance, select it, and click "Configure Instance Details".
 
-![Instance selection page.](./images/aws-instance.png){#aws-instance .class width=800}
+![Instance selection page.](./images/aws-instance.png){#aws-instance .class width=100%}
 
 You will land on the "Configure Instance Details" page. Here, I have canonically not done anything, so you can click on to "Add Storage". On the "Add Storage" page, change the `Size (GiB)` of the Root volume to 60GB. This maxes out the size of the root volume, so you don't have to worry about other storage.
 
-![Instance storage page.](./images/aws-storage.png){#aws-storage .class width=800}
+![Instance storage page.](./images/aws-storage.png){#aws-storage .class width=100%}
 
 Click on to "Add Tags", and then click on to "Configure Security Group". Here, you want to enable SSH access via the terminal, and you'll want to give this security access some memorable name that you can identify for future use.
 
 If this is the first time you're configuring a security group, set it up as follows:
 
-![First-time setup](./images/aws-security.png){#aws-security .class width=800}
+![First-time setup](./images/aws-security.png){#aws-security .class width=100%}
 
 If you've already set up a security group before, click on "Select an **existing** security group", and select that security group.
 
@@ -39,13 +39,13 @@ Then, click on "Review and Launch", and then "Launch".
 
 You will be prompted to select or create a "key pair"; this is for security purposes, and will allow you to SSH into the Amazon EC2 instance. Name the key pair name something memorable, say "beast", and then download the `beast.pem` file to your local disk.
 
-![Create a key pair for accessing AWS.](./images/aws-keys.png){#aws-keys .class width=800}
+![Create a key pair for accessing AWS.](./images/aws-keys.png){#aws-keys .class width=100%}
 
 **Note:** Some browsers will download it as `beast.pem.txt`. Be sure to then re-name it to `beast.pem`.
 
 Once the instance is launched, you can go back to the console, and wait for it to be initialized. You will see the following page:
 
-![AWS console.](./images/aws-console.png){#aws-console .class width=800}
+![AWS console.](./images/aws-console.png){#aws-console .class width=100%}
 
 Take note of the "Public DNS", and make a copy of that.
 
@@ -65,7 +65,7 @@ Host beast
     - If you are asked `Are you sure you want to continue connecting?`, be sure to answer `yes`.
 - Your Terminal session should look something like this:
 
-![SSH in iTerm2](./images/ssh.png){#ssh .class width=800}
+![SSH in iTerm2](./images/ssh.png){#ssh .class width=100%}
 
 # Install the necessary drivers.
 
@@ -150,7 +150,7 @@ $ which beast
 
 The purpose of this part here is to save the current state of the instance as an AMI, so that you don't have to configure this again in the future. Switch back to your browser and go to the AWS console. Select the current running instance, then click on `Actions > Image > Create Image`. You will get the following screen:
 
-![How to save an AWS instance image](./images/aws-save-ami.png){#aws-save-ami .class width=800}
+![How to save an AWS instance image](./images/aws-save-ami.png){#aws-save-ami .class width=100%}
 
 You will be able to create a new instance from this AMI, and use nearly identical SSH settings to get back into the instance.
 
