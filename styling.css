@@ -29,6 +29,13 @@ pre.config {
     padding-bottom: 1rem;
 }
 
-img {
-    width: 800px
+p.caption {
+    padding-left: 1rem;
+}
+
+div.figure {
+    width: 100%;
+    max-width: 600px;
+    border-style: solid;
+    border-color: grey;
 }
