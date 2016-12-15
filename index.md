@@ -8,6 +8,7 @@ date: 13 December 2016
 
 - Page source on [GitHub](https://www.github.com/ericmjl/beast-gpu-tutorial). Contributions welcome via Pull Requests.
 - More information on BEAST can found [here](http://beast.bio.ed.ac.uk).
+- I'm assuming you have money to spend on a GPU compute instance; the tutorial will not work with a free tier.
 
 # Configure and fire up an Amazon AWS instance
 
