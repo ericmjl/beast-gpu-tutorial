@@ -38,4 +38,5 @@ div.figure {
     max-width: 600px;
     border-style: solid;
     border-color: grey;
+    border-width: 0.5px;
 }
