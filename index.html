@@ -73,7 +73,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>I'm assuming you have money to spend on a GPU compute instance; the tutorial will not work with a free tier.</li>
 </ul>
 <h1 id="configure-and-fire-up-an-amazon-aws-instance">Configure and fire up an Amazon AWS instance</h1>
-<p>I have worked through the steps necessary for setting up CLI access. See the <a href="" title="./cli.html">CLI instructions</a> for more information. There's a bunch of one-off setup necessary for using the CLI, but once that's all set up, the magic command, with square brackets around what you have to fill in, is:</p>
+<p>I have worked through the steps necessary for setting up CLI access. See the <a href="" title="cli.html">CLI instructions</a> for more information. There's a bunch of one-off setup necessary for using the CLI, but once that's all set up, the magic command, with square brackets around what you have to fill in, is:</p>
 <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="ex">aws</span> ec2 run-instances \
     --image-id ami-40d28157 \
     --count 1 \

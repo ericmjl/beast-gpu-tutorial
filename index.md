@@ -25,7 +25,7 @@ $ aws ec2 run-instances \
 
 If you' prefer not to use the command line interface, read on.
 
-[CLI instructions]: (./cli.html)
+[CLI instructions]: (cli.html)
 
 Start by going to: http://aws.amazon.com/, and sign in using your Amazon.com account. You will arrive at the following console:
 
