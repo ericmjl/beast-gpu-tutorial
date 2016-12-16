@@ -1,0 +1,158 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="author" content="Eric J. Ma" />
+  <meta name="date" content="2016-12-15" />
+  <title>Creating an Amazon AWS Image using the CLI</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
+  <link rel="stylesheet" href="styling.css" type="text/css" />
+  <link href="https://fonts.googleapis.com/css?family=PT+Sans" rel="stylesheet”></link>
+</head>
+<body>
+<div id="header">
+<h1 class="title">Creating an Amazon AWS Image using the CLI</h1>
+<h2 class="author">Eric J. Ma</h2>
+<h3 class="date">15 December 2016</h3>
+</div>
+<div id="TOC">
+<ul>
+<li><a href="#the-one-magic-command">The One Magic Command</a></li>
+<li><a href="#install-amazon-aws-cli">Install Amazon AWS CLI</a></li>
+<li><a href="#configure-aws">Configure AWS</a></li>
+<li><a href="#optional-create-a-key-pair.">(Optional) Create a key-pair.</a></li>
+<li><a href="#optional-create-a-security-group.">(Optional) Create a security group.</a></li>
+<li><a href="#fire-up-an-ec2-instance">Fire up an EC2 instance</a></li>
+</ul>
+</div>
+<h1 id="the-one-magic-command">The One Magic Command</h1>
+<p>This magic command assumes that you have:</p>
+<ol style="list-style-type: decimal">
+<li>Configured AWS</li>
+<li>Created a key-pair that you can use.</li>
+<li>Created a security group and that you know which security group settings you're most comfortable using.</li>
+</ol>
+<p>These are oftentimes one-off things to configure from that point, the following is all that you have to remember:</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="ex">aws</span> ec2 run-instances \
+    --image-id ami-40d28157 \
+    --count 1 \
+    --instance-type g2.2xlarge \
+    --key-name cli_keypair \
+    --security-group-ids sg-28e2c455</code></pre></div>
+<p>If you've not done the aforementioned 3 things, then read on.</p>
+<h1 id="install-amazon-aws-cli">Install Amazon AWS CLI</h1>
+<p>Make sure you have Python installed. I recommend using the <a href="https://www.continuum.io/downloads">Anaconda distribution</a> of Python.</p>
+<p>After that, run the commands:</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="ex">pip</span> install awscli</code></pre></div>
+<h1 id="configure-aws">Configure AWS</h1>
+<p>The goal here is to configure the AWS CLI one time round so that you'll be able to use the CLI afterwards.</p>
+<p>Follow the instructions <a href="http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html#cli-quick-configuration">here</a> for configuring the AWS CLI. Once done, come back here.</p>
+<p>In the AWS control panel, under <code>Users</code>, click on the <code>Permissions</code> tab, and then create new permissions for a group of users, and then add yourself to that group of users.</p>
+<ul>
+<li>Add user to group &gt; <code>Create group</code>. (You'll have to do this the first time round, as there's no )</li>
+<li>Give your group some group name, (e.g. my group name is <code>em_group</code>), and then check the check box next to <code>AmazonEC2FullAccess</code>. Click on <code>Create group</code>.</li>
+<li>Click on <code>Groups</code>, and then click on <code>Add user to groups</code>, and then add yourself to the group you created.</li>
+</ul>
+<p>Now, test whether your AWS CLI works, by running the following command:</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="ex">aws</span> ec2 describe-instances</code></pre></div>
+<p>If everything runs correctly, it will output the instances that you currently have running. If nothing is running, nothing will be printed to the Terminal.</p>
+<p>If things are not working, you will most likely get an <code>UnauthorizedOperation</code> error... in which case, I would greatly appreciate <a href="https://github.com/ericmjl/beast-gpu-tutorial">Pull Requests</a> to the repository describing how you solved those errors.</p>
+<h1 id="optional-create-a-key-pair.">(Optional) Create a key-pair.</h1>
+<p>Only do this if you haven't done so already. The commands are fairly straightforward, and here's the overview first, before providing the code.</p>
+<p>Firstly, <code>cd</code> into the directory where you keep your SSH keys. On Unix-based systems, it will typically be <code>~/.ssh</code>. Then, use the CLI to create the key-pair and output it to disk in the <code>~/.ssh</code> directory. Finally, we change the permissions on the <code>.pem</code> file to a permission acceptable for use with EC2.</p>
+<p>In the following code block, remember to replace <code>cli_keypair</code> with some unique name that you prefer to use.</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="bu">cd</span> ~/.ssh
+$ <span class="ex">aws</span> ec2 create-key-pair --key-name cli_keypair <span class="op">&gt;</span> cli_keypair.pem
+$ <span class="fu">chmod</span> 400 cli_keypair.pem</code></pre></div>
+<p>Finally, use a text editor to edit the <code>.pem</code> file to get rid of the text (including the spaces) before <code>-----BEGIN RSA PRIVATE KEY-----</code> and after <code>-----END RSA PRIVATE KEY-----</code>. The <code>.pem</code> file should look like this:</p>
+<pre><code>-----BEGIN RSA PRIVATE KEY-----
+QJq6mm7HXZRjORImvjNqYRYwjMfWKyCUShFnj0jlP8iKSqLieO2C0nMWi+xaOfBMK1E844cPatpS
+MIDFowIBAAKCAQEAr3JB5qrzsnw3w64dOYdZ5bmdZYizw+23sk5TWZJJq62fGv6LUz96k051rz8E
+9g8BgE8/WeL1yPfds1jZEodCouDdGMqWap1kkx2ig7bB61Tj8CfWPbDB0u7j5AusIR98OofRFFzw
+h5Ed0F2FLFtqWD5ZDKW8x439xedM4/VkZci+w3CDtoqxR1yz8rk6GbY8YdkaTSpyRPLCn0uuDp8o
+...
+-----END RSA PRIVATE KEY-----</code></pre>
+<h1 id="optional-create-a-security-group.">(Optional) Create a security group.</h1>
+<p>In the short time I gave myself to write this tutorial, I could not figure out an &quot;easy-to-use&quot; way of creating a security group. I would recommend using the web-based interface to create on.</p>
+<p>Later on, if you want to figure out what security groups are available, run the following command:</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="ex">aws</span> ec2 describe-security-groups</code></pre></div>
+<p>A list of security groups that you have associated with your account will be printed to screen. <strong>Knowing the security group name is important for the next step.</strong></p>
+<h1 id="fire-up-an-ec2-instance">Fire up an EC2 instance</h1>
+<p>The instructions here are a summary of what's available on Amazon's <a href="http://docs.aws.amazon.com/cli/latest/userguide/cli-ec2-launch.html#launching-instances">website</a>. The most important command to run is below:</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="ex">aws</span> ec2 run-instances \
+    --image-id ami-40d28157 \
+    --count 1 \
+    --instance-type g2.2xlarge \
+    --key-name cli_keypair \
+    --security-group-ids sg-28e2c455</code></pre></div>
+<p>A few things to note here:</p>
+<ul>
+<li><code>--image-id ami-40d28157</code>: this is the Ubuntu Linux AMI.</li>
+<li><code>--count 1</code>: we are only launching one instance.</li>
+<li><code>--instance-type g2.2xlarge</code>: we are launching the <code>g2.2xlarge</code> instance, which is the GPU-based one.</li>
+<li><code>--key-name cli_keypair</code>: we are using this particular key to access the instance. It should not have the path to the key, but just the name of the key.</li>
+<li><code>--security-groups sg-28e2c455</code>: we are using this particular security group. Note: it's not the name you give it, but a unique ID assigned by Amazon.</li>
+</ul>
+<p>Once it's run, after a short while, you will see the instance show up running on your EC2 dashboard (view using web browser). Alternatively, run the following command to see what instances are running. Sample output is also provided.</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="ex">aws</span> ec2 describe-instances
+
+<span class="ex">RESERVATIONS</span>    597678314672    r-0a4c508d7779e8356
+<span class="ex">INSTANCES</span>   0   x86_64      False   xen ami-40d28157    i-027e9ef1e23a4e046 g2.2xlarge  cli_keypair 2016-12-16T00:49:29.000Z    ip-172-31-16-181.ec2.internal   172.31.16.181   ec2-54-88-130-120.compute-1.amazonaws.com   54.88.130.120   /dev/sda1   ebs True        subnet-8f15f1d7 hvm vpc-999e0ffd
+<span class="ex">BLOCKDEVICEMAPPINGS</span> /dev/sda1
+<span class="ex">EBS</span> 2016-12-16T00:49:30.000Z    True    attached    vol-0b404dcd8082e61c3
+<span class="ex">MONITORING</span>  disabled
+<span class="ex">NETWORKINTERFACES</span>       0e:ea:be:5f:f5:34   eni-efa84c2c    597678314672    ip-172-31-16-181.ec2.internal   172.31.16.181   True    in-use  subnet-8f15f1d7 vpc-999e0ffd
+<span class="ex">ASSOCIATION</span> amazon  ec2-54-88-130-120.compute-1.amazonaws.com   54.88.130.120
+<span class="ex">ATTACHMENT</span>  2016-12-16T00:49:29.000Z    eni-attach-66ee75e0 True    0   attached
+<span class="ex">GROUPS</span>  sg-28e2c455 SSH-only access
+<span class="ex">PRIVATEIPADDRESSES</span>  True    ip-172-31-16-181.ec2.internal   172.31.16.181
+<span class="ex">ASSOCIATION</span> amazon  ec2-54-88-130-120.compute-1.amazonaws.com   54.88.130.120
+<span class="ex">PLACEMENT</span>   us-east-1a      default
+<span class="ex">SECURITYGROUPS</span>  sg-28e2c455 SSH-only access
+<span class="ex">STATE</span>   16  running</code></pre></div>
+<p>Take note of the addresses provided. They are in the following line, accessible with <code>grep</code>.</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="ex">aws</span> ec2 describe-instances <span class="kw">|</span> <span class="fu">grep</span> INSTANCES
+<span class="ex">INSTANCES</span>   0   x86_64      False   xen ami-40d28157    i-027e9ef1e23a4e046 g2.2xlarge  cli_keypair 2016-12-16T00:49:29.000Z    ip-172-31-16-181.ec2.internal   172.31.16.181   ec2-54-88-130-120.compute-1.amazonaws.com   54.88.130.120   /dev/sda1   ebs True        subnet-8f15f1d7 hvm vpc-999e0ffd</code></pre></div>
+<p>Still not very convenient yet for programmatically starting and stopping instances, but it'll suffice for now. You can now SSH into the instance using the following commands:</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="fu">ssh</span> ubuntu@ec2-54-88-130-120.compute-1.amazonaws.com -i ~/.ssh/cli_keypair.pem</code></pre></div>
+</body>
+</html>
