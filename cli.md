@@ -151,8 +151,12 @@ $ aws ec2 describe-instances | grep INSTANCES
 INSTANCES	0	x86_64		False	xen	ami-40d28157	i-027e9ef1e23a4e046	g2.2xlarge	cli_keypair	2016-12-16T00:49:29.000Z	ip-172-31-16-181.ec2.internal	172.31.16.181	ec2-54-88-130-120.compute-1.amazonaws.com	54.88.130.120	/dev/sda1	ebs	True		subnet-8f15f1d7	hvm	vpc-999e0ffd
 ```
 
-Still not very convenient yet for programmatically starting and stopping instances, but it'll suffice for now. You can now SSH into the instance using the following commands:
+Still not very convenient yet for programmatically starting and stopping instances, but it'll suffice for now. Take note of the address of the instance, it'll look like `ec2-[ip-addr-numbers-here].compute-1.amazonaws.com`. You can now SSH into the instance using the following command:
 
 ```bash
 $ ssh ubuntu@ec2-54-88-130-120.compute-1.amazonaws.com -i ~/.ssh/cli_keypair.pem
 ```
+
+Alternatively, you can choose to go back and edit your SSH config file. This is described in the [main tutorial][back].
+
+[back]: https://ericmjl.github.io/beast-gpu-tutorial/#configure-ssh-and-then-ssh-into-the-amazon-ec2-instance
