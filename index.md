@@ -12,7 +12,7 @@ date: 13 December 2016
 
 # Configure and fire up an Amazon AWS instance
 
-I have worked through the steps necessary for setting up CLI access. See the [CLI instructions] for more information. There's a bunch of one-off setup necessary for using the CLI, but once that's all set up, the magic command, with square brackets around what you have to fill in, is:
+I have worked through the steps necessary for setting up CLI access. See the [CLI instructions][cli] for more information. There's a bunch of one-off setup necessary for using the CLI, but once that's all set up, the magic command, with square brackets around what you have to fill in, is:
 
 ```bash
 $ aws ec2 run-instances \
@@ -25,7 +25,7 @@ $ aws ec2 run-instances \
 
 If you' prefer not to use the command line interface, read on.
 
-[CLI instructions]: ./cli.html
+[cli]: ./cli.html
 
 Start by going to: http://aws.amazon.com/, and sign in using your Amazon.com account. You will arrive at the following console:
 
