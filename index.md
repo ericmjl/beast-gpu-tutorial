@@ -23,7 +23,7 @@ $ aws ec2 run-instances \
     --security-group-ids [my-security-group-id]
 ```
 
-If you' prefer not to use the command line interface, read on.
+If you'd prefer not to use the command line interface, read on.
 
 [cli]: ./cli.html
 
