@@ -27,7 +27,7 @@ If you'd prefer not to use the command line interface, read on.
 
 [cli]: ./cli.html
 
-Start by going to [Amazon AWS][http://aws.amazon.com/] and sign in using your Amazon.com account. You will arrive at the following console:
+Start by going to [Amazon AWS](http://aws.amazon.com/) and sign in using your Amazon.com account. You will arrive at the following console:
 
 ![AWS landing page](./images/aws-landing.png){#aws-landing .class width=100%}
 
