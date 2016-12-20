@@ -123,7 +123,7 @@ Exit out of `nano` by hitting the following key combinations:
 - `Ctrl` + `X` (exit)
 - `Y` (say yes to save)
 
-Finally, run the install script using the following command: `bash install.sh`. Give it a bit of time (~5 min in total, in my experience), and then CUDA OpenCL and BEAGLE will be installed.
+Finally, run the install script using the following command: `bash install.sh`. Give it a bit of time (~5 min in total, in my experience), and then CUDA, OpenCL and BEAGLE will be installed.
 
 Next up, we will have to edit your `.bashrc` using `nano`. Follow the following commands (of course, ignoring the `$` symbol):
 
