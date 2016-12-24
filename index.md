@@ -6,9 +6,12 @@ date: 13 December 2016
 
 # Information
 
+- Update 24 December 2016: Terry Jones has kindly shared [his tutorial][jones] written in 2015 for BEAST2. I plan to examine his tutorial and incorporate installation instructions for BEAST2 here.
 - Page source on [GitHub](https://www.github.com/ericmjl/beast-gpu-tutorial). Contributions welcome via Pull Requests.
 - More information on BEAST can found [here](http://beast.bio.ed.ac.uk).
 - I'm assuming you have money to spend on a GPU compute instance; the tutorial will not work with a free tier.
+
+[jones]: (./beast2.html)
 
 # Configure and fire up an Amazon AWS instance
 

@@ -1,0 +1,170 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="author" content="Terry Jones" />
+  <title>Install BEAST and BEAGLE on an AWS GPU instance</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
+  <link rel="stylesheet" href="styling.css" type="text/css" />
+  <link href="https://fonts.googleapis.com/css?family=PT+Sans" rel="stylesheet”></link>
+</head>
+<body>
+<div id="header">
+<h1 class="title">Install BEAST and BEAGLE on an AWS GPU instance</h1>
+<h2 class="author">Terry Jones</h2>
+<h3 class="date">2015-10-01 11:16</h3>
+</div>
+<div id="TOC">
+<ul>
+<li><a href="#quickstart">Quickstart</a></li>
+<li><a href="#how-i-built-the-ec2-image">How I built the EC2 image</a></li>
+<li><a href="#install-nvidia-cuda-drivers">Install NVIDIA CUDA drivers</a></li>
+<li><a href="#beagle">BEAGLE</a></li>
+<li><a href="#java-8">Java 8</a></li>
+<li><a href="#beast">BEAST</a><ul>
+<li><a href="#testing-beagle">Testing BEAGLE</a></li>
+</ul></li>
+<li><a href="#make-an-ec2-image">Make an EC2 image</a></li>
+</ul>
+</div>
+<h1 id="quickstart">Quickstart</h1>
+<p>If you just want to launch an AWS instance with BEAST installed along with BEAGLE with GPU support, use the EC2 AMI <code>ami-6f63250a</code> and launch either a <code>g2.2xlarge</code> (1 GPU, 15GB RAM, $0.65 per hour) or <code>g2.8xlarge</code> (4 GPUs, 60GB RAM, $2.60 per hour) instance running Ubuntu 14.04. Each GPU has 1,536 CUDA cores and 4GB of video memory.</p>
+<p>Amazon EC2 <a href="https://aws.amazon.com/ec2/instance-types/">instance types</a> and <a href="https://aws.amazon.com/ec2/pricing/">pricing</a>. Note that if you know you're going to be doing a lot of this, you will find it cheaper to purchase a reserved instance.</p>
+<h1 id="how-i-built-the-ec2-image">How I built the EC2 image</h1>
+<p>I started an AWS <code>g2.2xlarge</code> instance running Ubuntu 14.04. Then connect to it and get started:</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash">$ <span class="fu">ssh</span> -i ~/dark-matter/aws/default.pem -l ubuntu 54.167.43.174  <span class="co"># Your IP address and keypair will be different!</span>
+$ <span class="fu">sudo</span> apt-get update
+$ <span class="fu">sudo</span> apt-get upgrade</code></pre></div>
+<h1 id="install-nvidia-cuda-drivers">Install NVIDIA CUDA drivers</h1>
+<p>I followed instructions <a href="http://tleyden.github.io/blog/2014/10/25/cuda-6-dot-5-on-aws-gpu-instance-running-ubuntu-14-dot-04/">here</a> with slight modifications to get a more recent version (7.5) of CUDA. The instructions on that page worked fine, but for the record here's what I did:</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash">$ <span class="fu">sudo</span> apt-get update
+$ <span class="fu">sudo</span> apt-get install build-essential
+$ <span class="fu">sudo</span> apt-get install linux-image-extra-virtual</code></pre></div>
+<p>Take the &quot;package maintainers version&quot; when asked about the grub update.</p>
+<p>Get CUDA:</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash">$ <span class="ex">curl</span> -O -L <span class="st">&#39;http://developer.download.nvidia.com/compute/cuda/7.5/Prod/local_installers/cuda_7.5.18_linux.run&#39;</span></code></pre></div>
+<p>This gets you version 7.5 of CUDA, which might be out of date by the time you read this. If you go to the <a href="https://developer.nvidia.com/cuda-downloads">NVIDIA CUDA download page</a> and select your version of Linux etc., you can then copy the link of the <code>Download</code> button and use that instead of the 7.5.18 version mentioned above.</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="co"># Your version numbers may differ in the following.</span>
+$ <span class="fu">chmod</span> +x cuda_7.5.18_linux.run
+$ <span class="fu">mkdir</span> nvidia_installers
+$ <span class="fu">sudo</span> ./cuda_7.5.10_linux.run -a -extract=<span class="kw">`</span><span class="bu">pwd</span><span class="kw">`</span>/nvidia_installers
+$ <span class="bu">cd</span> nvidia_installers
+$ <span class="fu">sudo</span> ./NVIDIA-Linux-x86_64-352.39.run</code></pre></div>
+<p>Reboot:</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash">$ <span class="fu">sudo</span> reboot</code></pre></div>
+<p>Log back into the instance.</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="fu">cat</span> &lt;&lt;EOT
+blacklist nouveau
+blacklist lbm-nouveau
+options nouveau modeset=0
+alias nouveau off
+alias lbm-nouveau off
+EOT | sudo tee -a /etc/modprobe.d/blacklist-nouveau.conf</code></pre></div>
+<p>Disable the Kernel Nouveau and reboot:</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash">$ <span class="bu">echo</span> options nouveau modeset=0 <span class="kw">|</span> <span class="fu">sudo</span> tee -a /etc/modprobe.d/nouveau-kms.conf
+$ <span class="fu">sudo</span> update-initramfs -u
+$ <span class="fu">sudo</span> reboot</code></pre></div>
+<p>Log back into the instance and install Linux source and headers. You can get your kernel version (and put it into the following) from <code>uname -r</code> (mine was <code>3.13.0-65</code>, obviously).</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash">$ <span class="fu">sudo</span> apt-get install linux-source
+$ <span class="fu">sudo</span> apt-get install linux-headers-3.13.0-65-generic</code></pre></div>
+<p>Re-run NVIDIA installer:</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash">$ <span class="bu">cd</span> nvidia_installers
+$ <span class="fu">sudo</span> ./NVIDIA-Linux-x86_64-352.39.run -a</code></pre></div>
+<p>Load the kernel module:</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash">$ <span class="fu">sudo</span> modprobe nvidia</code></pre></div>
+<p>Run the CUDA and samples installer:</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash">$ <span class="fu">sudo</span> ./cuda-linux64-rel-7.5.18-19867135.run
+$ <span class="fu">sudo</span> ./cuda-samples-linux-7.5.18-19867135.run</code></pre></div>
+<p>Verify CUDA is correctly installed</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash">$ <span class="bu">cd</span> /usr/local/cuda/samples/1_Utilities/deviceQuery
+$ <span class="fu">sudo</span> make
+$ <span class="ex">./deviceQuery</span></code></pre></div>
+<p>You should see the following (your version number may differ) at the end of the output:</p>
+<pre><code>deviceQuery, CUDA Driver = CUDART, CUDA Driver Version = 7.5, CUDA Runtime Version = 7.5, NumDevs = 1, Device0 = GRID K520
+Result = PASS</code></pre>
+<h1 id="beagle">BEAGLE</h1>
+<p>From the instructions on <a href="https://github.com/beagle-dev/beagle-lib/wiki/LinuxInstallInstructions">installing BEAGLE on Linux</a> page:</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash">$ <span class="fu">sudo</span> apt-get install autoconf automake libtool subversion pkg-config openjdk-6-jdk git openCL-dev</code></pre></div>
+<p>Then</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash">$ <span class="fu">git</span> clone --depth=1 https://github.com/beagle-dev/beagle-lib.git
+$ <span class="bu">cd</span> beagle-lib
+$ <span class="ex">./autogen.sh</span>
+$ <span class="ex">./configure</span> --prefix=/usr/local --with-opencl=/usr/lib/x86_64-linux-gnu
+$ <span class="fu">sudo</span> make install</code></pre></div>
+<h1 id="java-8">Java 8</h1>
+<p>From <a href="http://tecadmin.net/install-oracle-java-8-jdk-8-ubuntu-via-ppa">this page</a>:</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash">$ <span class="fu">sudo</span> add-apt-repository ppa:webupd8team/java
+$ <span class="fu">sudo</span> apt-get update
+$ <span class="fu">sudo</span> apt-get install oracle-java8-installer</code></pre></div>
+<h1 id="beast">BEAST</h1>
+<p>You might want to get a more recent version than the one below:</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash">$ <span class="bu">cd</span>
+$ <span class="ex">curl</span> -O -L <span class="st">&#39;https://github.com/CompEvol/beast2/releases/download/v2.3.1/BEAST.v2.3.1.Linux.tgz&#39;</span>
+$ <span class="bu">cd</span> /usr/local
+$ <span class="fu">sudo</span> tar xfz ~/BEAST.v2.3.1.Linux.tgz</code></pre></div>
+<p>See what BEAGLE resources BEAST thinks it has available</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash">$ <span class="ex">/usr/local/beast/bin/beast</span> -beagle_info</code></pre></div>
+<p>If all has worked, the output of the last command above will look roughly like</p>
+<pre><code>BEAGLE resources available:
+0 : CPU
+    Flags: PRECISION_SINGLE PRECISION_DOUBLE COMPUTATION_SYNCH EIGEN_REAL EIGEN_COMPLEX SCALING_MANUAL SCALING_AUTO SCALING_ALWAYS SCALERS_RAW SCALERS_LOG VECTOR_SSE VECTOR_NONE THREADING_NONE PROCESSOR_CPU FRAMEWORK_CPU
+
+
+1 : GRID K520
+    Global memory (MB): 4096
+    Clock speed (Ghz): 0.80
+    Number of cores: 1536
+    Flags: PRECISION_SINGLE PRECISION_DOUBLE COMPUTATION_SYNCH EIGEN_REAL EIGEN_COMPLEX SCALING_MANUAL SCALING_AUTO SCALING_ALWAYS SCALERS_RAW SCALERS_LOG VECTOR_NONE THREADING_NONE PROCESSOR_GPU FRAMEWORK_CUDA
+
+
+2 : GRID K520 (OpenCL 1.2 CUDA)
+    Global memory (MB): 4095
+    Clock speed (Ghz): 0.80
+    Number of multiprocessors: 8
+    Flags: PRECISION_SINGLE PRECISION_DOUBLE COMPUTATION_SYNCH EIGEN_REAL EIGEN_COMPLEX SCALING_MANUAL SCALING_AUTO SCALING_ALWAYS SCALERS_RAW SCALERS_LOG VECTOR_NONE THREADING_NONE PROCESSOR_GPU FRAMEWORK_OPENCL</code></pre>
+<h2 id="testing-beagle">Testing BEAGLE</h2>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash">$ <span class="bu">cd</span> ~/beagle-lib
+$ <span class="fu">make</span> check</code></pre></div>
+<h1 id="make-an-ec2-image">Make an EC2 image</h1>
+<p>On the AWS control panel for EC2, select the instance you did the above on. In the &quot;Actions&quot; menu you can select Image / Create Image. As mentioned above, the image I created is <code>ami-6f63250a</code>.</p>
+</body>
+</html>
