@@ -11,7 +11,7 @@ date: 13 December 2016
 - More information on BEAST can found [here](http://beast.bio.ed.ac.uk).
 - I'm assuming you have money to spend on a GPU compute instance; the tutorial will not work with a free tier.
 
-[jones]: (./beast2.html)
+[jones]: ./beast2.html
 
 # Configure and fire up an Amazon AWS instance
 
